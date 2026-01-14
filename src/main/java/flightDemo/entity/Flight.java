@@ -1,0 +1,65 @@
+package flightDemo.entity;
+
+import flightDemo.enums.Traffic;
+import io.quarkus.runtime.annotations.RegisterForReflection;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CurrentTimestamp;
+import org.hibernate.annotations.SourceType;
+import org.hibernate.envers.Audited;
+import org.hibernate.generator.EventType;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+@Audited
+@Table(name = "FLIGHT",
+        indexes = {
+                @Index(name = "IDX_FLIGHT_FLIGHT_ID", columnList = "FLIGHT_ID")
+        })
+@RegisterForReflection
+public class Flight {
+
+    @Column(name = "ID")
+    @GeneratedValue(generator = "SEQ_FLIGHT_LEG")
+    @SequenceGenerator(name = "SEQ_FLIGHT_LEG", sequenceName = "SEQ_FLIGHT_LEG", allocationSize = 1)
+    @Id
+    private Long id;
+
+    @Column(name = "FLIGHT_ID")
+    private String flightId;
+
+    @Column(name = "CARRIER_CODE")
+    private String carrierCode;
+
+    @Column(name = "FLIGHT_NUMBER")
+    private Long flightNumber;
+
+    @Column(name = "FLIGHT_DATE")
+    private LocalDate flightDate;
+
+    @Column(name = "TRAFFIC")
+    @Enumerated(EnumType.STRING)
+    private Traffic traffic;
+
+    @Column(name = "DEPARTURE_AIRPORT")
+    private String departureAirport;
+
+    @Column(name = "ARRIVAL_AIRPORT")
+    private String arrivalAirport;
+
+    @CurrentTimestamp(event = EventType.INSERT, source = SourceType.VM)
+    @Column(name = "CREATED_AT", nullable = false)
+    private LocalDateTime createdAt;
+
+    @CurrentTimestamp(event = {EventType.INSERT, EventType.UPDATE}, source = SourceType.VM)
+    @Column(name = "UPDATED_AT")
+    private LocalDateTime updatedAt;
+
+}

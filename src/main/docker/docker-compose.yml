@@ -11,5 +11,71 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  redpanda:
+    image: redpandadata/redpanda:latest
+    container_name: recon-redpanda
+    command:
+      - redpanda
+      - start
+      - --overprovisioned
+      - --smp
+      - "1"
+      - --memory
+      - "1G"
+      - --reserve-memory
+      - "0M"
+      - --node-id
+      - "0"
+      - --check=false
+      - --kafka-addr
+      - INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:19092
+      - --advertise-kafka-addr
+      - INTERNAL://redpanda:9092,OUTSIDE://localhost:19092
+    ports:
+      - "9092:9092"
+      - "19092:19092"
+      - "9644:9644"
+
+  redpanda-init:
+    image: redpandadata/redpanda:latest
+    container_name: recon-redpanda-init
+    depends_on:
+      - redpanda
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "rpk cluster info -X brokers=redpanda:9092 &&
+       rpk topic create flight-context -X brokers=redpanda:9092 --partitions 1 --replicas 1 || true"
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: recon-kafka-ui
+    depends_on:
+      - redpanda
+    ports:
+      - "8085:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: redpanda:9092
+
+  flight-seeder:
+    image: maven:3.9-eclipse-temurin-17
+    container_name: recon-flight-seeder
+    depends_on:
+      - redpanda
+      - redpanda-init
+    working_dir: /workspace
+    volumes:
+      - ../../..:/workspace
+      - m2cache:/root/.m2
+    environment:
+      BOOTSTRAP_SERVERS: redpanda:9092
+      TOPIC: flight-context
+      COUNT: "500"
+    command: >
+      mvn -q -DskipTests
+      -Dexec.mainClass=flightDemo.seeder.FlightSeeder
+      exec:java
+
 volumes:
   pgdata:
+  m2cache:

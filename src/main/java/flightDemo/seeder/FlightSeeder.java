@@ -30,9 +30,9 @@ public class FlightSeeder {
     );
 
     public static void main(String[] args) {
-        String bootstrap = env("BOOTSTRAP_SERVERS", "localhost:9092");
-        String topic = env("TOPIC", "flight-context");
-        int count = Integer.parseInt(env("COUNT", "500"));
+        var bootstrap = env("BOOTSTRAP_SERVERS", "localhost:9092");
+        var topic = env("TOPIC", "flight-context");
+        var count = Integer.parseInt(env("COUNT", "500"));
 
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrap);
@@ -61,7 +61,7 @@ public class FlightSeeder {
 
     }
 
-    private static FlightMessage makeMessage(int i) {
+    private static FlightMessage makeMessage(Integer i) {
         var carrierCode = "OA";
         var flightDate = LocalDate.of(2026, 1, 15).plusDays(i / 50);
         var flightNumber = 100 + RND.nextInt(1900);

@@ -1,7 +1,10 @@
 package flightDemo.service;
 
 import flightDemo.dto.FlightCreateRequest;
+import flightDemo.dto.FlightSearchRequest;
 import flightDemo.entity.Flight;
+import flightDemo.pageable.PageResult;
+import flightDemo.pageable.Pageable;
 import flightDemo.repository.FlightRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
@@ -49,5 +52,9 @@ public class FlightService {
         flight.setDepartureAirport(flightCreateRequest.getDepartureAirport());
         flight.setArrivalAirport(flightCreateRequest.getArrivalAirport());
         flightRepository.mergeAndFlush(flight);
+    }
+
+    public PageResult<Flight> findAll(FlightSearchRequest request, Pageable pageable) {
+        return flightRepository.findAll(request,pageable);
     }
 }

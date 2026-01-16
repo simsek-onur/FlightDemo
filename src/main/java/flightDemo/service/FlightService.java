@@ -90,7 +90,7 @@ public class FlightService {
         }
 
         LOG.errorf("Flight not found with id %s",flightId);
-        throw new NotFoundException("Flight not found with id %s"+flightId);
+        throw new NotFoundException("Flight not found with id "+flightId);
     }
 
     @CacheInvalidate(cacheName = "flight-by-id")

@@ -9,6 +9,7 @@ import flightDemo.pageable.Pageable;
 import flightDemo.service.FlightService;
 import io.quarkus.cache.CacheKey;
 import io.quarkus.cache.CacheResult;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -28,7 +29,7 @@ public class FlightResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public PageResult<FlightDTO> findAll(@BeanParam FlightSearchRequest request, @BeanParam Pageable pageable) {
+    public PageResult<FlightDTO> findAll(@BeanParam @Valid FlightSearchRequest request, @BeanParam @Valid Pageable pageable) {
         return flightService.findAll(request, pageable).map(flightMapper::mapToDTO);
     }
 
@@ -68,7 +69,7 @@ public class FlightResource {
     @Path("/flight-id/{flightId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("flightId") String flightId, FlightCreateRequest request) {
+    public Response update(@PathParam("flightId") String flightId,@Valid FlightCreateRequest request) {
         if (Objects.nonNull(request.getFlightId()) && !flightId.equals(request.getFlightId())) {
             throw new BadRequestException("Path flightId must match body flightId");
         }

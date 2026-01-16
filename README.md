@@ -20,11 +20,12 @@ health checks, Swagger/OpenAPI, and Redis-backed caching for `GET /flight/flight
 - Maven
 - Docker + Docker Compose
 
-## Quickstart (copy/paste)
+## Quickstart
 ```bash
 # Verify Java + Maven (must be Java 17)
 java -version
 mvn -v
+```
 
 # Start dependencies (compose file lives under src/main/docker)
 cd src/main/docker

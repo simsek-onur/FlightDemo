@@ -28,23 +28,32 @@ mvn -v
 ```
 
 # Start dependencies (compose file lives under src/main/docker)
+```
 cd src/main/docker
 docker compose up -d
 docker compose ps
 cd -
+```
 
 # Run the app
+```
 mvn quarkus:dev
+```
 
 # Health
+```
 curl -i http://localhost:8080/q/health/ready
 curl -i http://localhost:8080/q/health/live
+```
 
 # Swagger / OpenAPI
+```
 open http://localhost:8080/q/swagger-ui/
 curl -s http://localhost:8080/q/openapi | head -n 20
+```
 
 # Create a flight
+```
 curl -i -X POST "http://localhost:8080/flight" \
   -H "Content-Type: application/json" \
   -d '{
@@ -56,11 +65,15 @@ curl -i -X POST "http://localhost:8080/flight" \
     "departureAirport":"IST",
     "arrivalAirport":"LHR"
   }'
+```
 
 # Get by flightId (cached)
+```
 curl -i "http://localhost:8080/flight/flight-id/TEST-FLT-1"
+```
 
-# Update by flightId (also invalidates cache for that flightId)
+# Update by flightId
+```
 curl -i -X PUT "http://localhost:8080/flight/flight-id/TEST-FLT-1" \
   -H "Content-Type: application/json" \
   -d '{
@@ -72,18 +85,27 @@ curl -i -X PUT "http://localhost:8080/flight/flight-id/TEST-FLT-1" \
     "departureAirport":"IST",
     "arrivalAirport":"LHR"
   }'
+```
 
-# List flights (paged)
+# List flights (Pageable)
+```
 curl -s "http://localhost:8080/flight?page=0&size=10"
+```
 
 # Verify Redis (host port 6367)
+```
 redis-cli -p 6367 PING
 redis-cli -p 6367 KEYS "cache:flight-by-id:*"
+```
 
 # Run tests (uses Testcontainers for Postgres)
+```
 mvn test
+```
 
 # Stop dependencies
+```
 cd src/main/docker
 docker compose down
 cd -
+```

@@ -32,26 +32,26 @@ public class Flight {
     @Id
     private Long id;
 
-    @Column(name = "FLIGHT_ID")
+    @Column(name = "FLIGHT_ID",nullable = false)
     private String flightId;
 
-    @Column(name = "CARRIER_CODE")
+    @Column(name = "CARRIER_CODE",nullable = false)
     private String carrierCode;
 
-    @Column(name = "FLIGHT_NUMBER")
+    @Column(name = "FLIGHT_NUMBER",nullable = false)
     private Long flightNumber;
 
-    @Column(name = "FLIGHT_DATE")
+    @Column(name = "FLIGHT_DATE",nullable = false)
     private LocalDate flightDate;
 
-    @Column(name = "TRAFFIC")
+    @Column(name = "TRAFFIC",nullable = false)
     @Enumerated(EnumType.STRING)
     private Traffic traffic;
 
-    @Column(name = "DEPARTURE_AIRPORT")
+    @Column(name = "DEPARTURE_AIRPORT",nullable = false)
     private String departureAirport;
 
-    @Column(name = "ARRIVAL_AIRPORT")
+    @Column(name = "ARRIVAL_AIRPORT",nullable = false)
     private String arrivalAirport;
 
     @CurrentTimestamp(event = EventType.INSERT, source = SourceType.VM)

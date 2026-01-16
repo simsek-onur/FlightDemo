@@ -7,6 +7,8 @@ import flightDemo.mapper.FlightMapper;
 import flightDemo.pageable.PageResult;
 import flightDemo.pageable.Pageable;
 import flightDemo.service.FlightService;
+import io.quarkus.cache.CacheKey;
+import io.quarkus.cache.CacheResult;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -43,11 +45,13 @@ public class FlightResource {
     @GET
     @Path("/flight-id/{flightId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findByFlightId(@PathParam("flightId") String flightId) {
-        var dto = flightService.findByFlightId(flightId)
+    @CacheResult(cacheName = "flight-by-id")
+    public FlightDTO findByFlightId(@PathParam("flightId") @CacheKey String flightId) {
+
+        var entity = flightService.findByFlightId(flightId)
                 .orElseThrow(() -> new NotFoundException("Flight not found: " + flightId));
 
-        return Response.ok(dto).build();
+        return flightMapper.mapToDTO(entity);
     }
 
     @POST

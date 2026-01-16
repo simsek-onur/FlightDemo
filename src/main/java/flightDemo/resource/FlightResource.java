@@ -58,7 +58,7 @@ public class FlightResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(FlightCreateRequest request) {
+    public Response create(@Valid FlightCreateRequest request) {
         var created = flightService.createFlight(request);
         return Response.status(Response.Status.CREATED)
                 .entity(flightMapper.mapToDTO(created))

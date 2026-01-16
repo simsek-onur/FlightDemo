@@ -12,6 +12,9 @@
           <option value="FlightDemo" />
           <option value="FlightDemo" />
           <option value="FlightDemo" />
+          <option value="FlightDemo" />
+          <option value="FlightDemo" />
+          <option value="FlightDemo" />
         </list>
       </option>
       <option name="ignoredPackages">
@@ -19,10 +22,16 @@
           <option value="org.lz4:lz4-java:1.8.0" />
           <option value="org.postgresql:postgresql:42.7.4" />
           <option value="org.apache.commons:commons-lang3:3.14.0" />
+          <option value="io.quarkus:quarkus-vertx:3.15.3" />
+          <option value="io.quarkus:quarkus-vertx-http:3.15.3" />
+          <option value="io.vertx:vertx-web:4.5.11" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />

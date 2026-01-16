@@ -11,6 +11,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Path("/flight")
@@ -59,6 +60,10 @@ public class FlightResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("flightId") String flightId, FlightCreateRequest request) {
+        if (Objects.nonNull(request.getFlightId()) && !flightId.equals(request.getFlightId())) {
+            throw new BadRequestException("Path flightId must match body flightId");
+        }
+
         var updated = flightService.updateByFlightId(flightId, request);
         return Response.ok(flightMapper.mapToDTO(updated)).build();
     }

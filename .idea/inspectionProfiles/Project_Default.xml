@@ -11,16 +11,19 @@
         <list>
           <option value="FlightDemo" />
           <option value="FlightDemo" />
+          <option value="FlightDemo" />
         </list>
       </option>
       <option name="ignoredPackages">
         <list>
           <option value="org.lz4:lz4-java:1.8.0" />
           <option value="org.postgresql:postgresql:42.7.4" />
+          <option value="org.apache.commons:commons-lang3:3.14.0" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
         </list>

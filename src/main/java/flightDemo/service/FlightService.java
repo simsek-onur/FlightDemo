@@ -8,6 +8,7 @@ import flightDemo.pageable.Pageable;
 import flightDemo.repository.FlightRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import org.jboss.logging.Logger;
 
 import java.util.Optional;
@@ -76,9 +77,9 @@ public class FlightService {
         var flightOptional = flightRepository.findByFlightId(flightId);
         if(flightOptional.isPresent()){
             return updateFlight(request,flightOptional.get());
-        } else{
-            LOG.errorf("Flight not found with id %s",request.getFlightId());
         }
-        return null;
+
+        LOG.errorf("Flight not found with id %s",request.getFlightId());
+        throw new NotFoundException("Flight not found with id "+request.getFlightId());
     }
 }

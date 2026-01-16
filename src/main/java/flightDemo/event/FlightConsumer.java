@@ -40,7 +40,7 @@ public class FlightConsumer {
 
         flightCreateRequest.setTraffic(Traffic.valueOf(payload.getTraffic()));
 
-        flightService.createOrUpdateFlight(flightCreateRequest);
+        flightService.upsertFlight(flightCreateRequest);
         LOG.infof("Consumed flightId=%s", payload.getFlightId());
     }
 }

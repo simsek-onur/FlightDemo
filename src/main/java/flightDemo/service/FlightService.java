@@ -8,17 +8,21 @@ import flightDemo.pageable.Pageable;
 import flightDemo.repository.FlightRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import org.jboss.logging.Logger;
+
+import java.util.Optional;
 
 @ApplicationScoped
 public class FlightService {
 
     private final FlightRepository flightRepository;
+    private static final Logger LOG = Logger.getLogger(FlightService.class);
 
     public FlightService(FlightRepository flightRepository) {
         this.flightRepository = flightRepository;
     }
 
-    public void createOrUpdateFlight(FlightCreateRequest flightCreateRequest){
+    public void upsertFlight(FlightCreateRequest flightCreateRequest){
         var flightOptional = flightRepository.findByFlightId(flightCreateRequest.getFlightId());
         if(flightOptional.isEmpty()){
             createFlight(flightCreateRequest);
@@ -30,7 +34,7 @@ public class FlightService {
     }
 
     @Transactional
-    public void createFlight(FlightCreateRequest flightCreateRequest){
+    public Flight createFlight(FlightCreateRequest flightCreateRequest){
         var flight = Flight.builder()
                 .flightId(flightCreateRequest.getFlightId())
                 .carrierCode(flightCreateRequest.getCarrierCode())
@@ -41,10 +45,11 @@ public class FlightService {
                 .arrivalAirport(flightCreateRequest.getArrivalAirport())
                 .build();
         flightRepository.persist(flight);
+        return flight;
     }
 
     @Transactional
-    public void updateFlight(FlightCreateRequest flightCreateRequest,Flight flight){
+    public Flight updateFlight(FlightCreateRequest flightCreateRequest,Flight flight){
         flight.setCarrierCode(flightCreateRequest.getCarrierCode());
         flight.setFlightNumber(flightCreateRequest.getFlightNumber());
         flight.setFlightDate(flightCreateRequest.getFlightDate());
@@ -52,9 +57,28 @@ public class FlightService {
         flight.setDepartureAirport(flightCreateRequest.getDepartureAirport());
         flight.setArrivalAirport(flightCreateRequest.getArrivalAirport());
         flightRepository.mergeAndFlush(flight);
+        return flight;
     }
 
     public PageResult<Flight> findAll(FlightSearchRequest request, Pageable pageable) {
         return flightRepository.findAll(request,pageable);
+    }
+
+    public Optional<Flight> findByIdOptional(Long id) {
+        return flightRepository.findByIdOptional(id);
+    }
+
+    public Optional<Flight> findByFlightId(String flightId) {
+        return flightRepository.findByFlightId(flightId);
+    }
+
+    public Flight updateByFlightId(String flightId,FlightCreateRequest request) {
+        var flightOptional = flightRepository.findByFlightId(flightId);
+        if(flightOptional.isPresent()){
+            return updateFlight(request,flightOptional.get());
+        } else{
+            LOG.errorf("Flight not found with id %s",request.getFlightId());
+        }
+        return null;
     }
 }

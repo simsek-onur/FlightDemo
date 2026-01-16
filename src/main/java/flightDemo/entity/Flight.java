@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
 @Entity
 @Audited
 @Table(name = "FLIGHT",
-        indexes = {
-                @Index(name = "IDX_FLIGHT_FLIGHT_ID", columnList = "FLIGHT_ID")
+        uniqueConstraints = {
+                @UniqueConstraint(name = "UNQ_FLIGHT_FLIGHT_ID", columnNames = {"FLIGHT_ID"})
         })
 @RegisterForReflection
 public class Flight {

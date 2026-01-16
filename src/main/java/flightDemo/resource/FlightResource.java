@@ -12,7 +12,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Path("/flight")
 public class FlightResource {
@@ -34,15 +33,21 @@ public class FlightResource {
     @GET
     @Path("/id/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Optional<FlightDTO> findByIdOptional(@PathParam("id") Long id) {
-        return flightService.findByIdOptional(id).map(flightMapper::mapToDTO);
+    public Response findByIdOptional(@PathParam("id") Long id) {
+        var dto = flightService.findByIdOptional(id)
+                .orElseThrow(() -> new NotFoundException("Flight not found: " + id));
+
+        return Response.ok(dto).build();
     }
 
     @GET
     @Path("/flight-id/{flightId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Optional<FlightDTO> findByFlightId(@PathParam("flightId") String flightId) {
-        return flightService.findByFlightId(flightId).map(flightMapper::mapToDTO);
+    public Response findByFlightId(@PathParam("flightId") String flightId) {
+        var dto = flightService.findByFlightId(flightId)
+                .orElseThrow(() -> new NotFoundException("Flight not found: " + flightId));
+
+        return Response.ok(dto).build();
     }
 
     @POST

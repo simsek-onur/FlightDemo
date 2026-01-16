@@ -3,10 +3,7 @@ package flightDemo.dto;
 
 import flightDemo.enums.Traffic;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -15,6 +12,8 @@ import java.time.LocalDate;
 @ToString
 @RegisterForReflection
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FlightCreateRequest {
     private String flightId;
     private String carrierCode;

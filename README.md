@@ -21,13 +21,13 @@ health checks, Swagger/OpenAPI, and Redis-backed caching for `GET /flight/flight
 - Docker + Docker Compose
 
 ## Quickstart
-```bash
+```
 # Verify Java + Maven (must be Java 17)
 java -version
 mvn -v
 ```
 
-# Start dependencies (compose file lives under src/main/docker)
+# Start dependencies
 ```
 cd src/main/docker
 docker compose up -d
@@ -92,13 +92,13 @@ curl -i -X PUT "http://localhost:8080/flight/flight-id/TEST-FLT-1" \
 curl -s "http://localhost:8080/flight?page=0&size=10"
 ```
 
-# Verify Redis (host port 6367)
+# Verify Redis
 ```
 redis-cli -p 6367 PING
 redis-cli -p 6367 KEYS "cache:flight-by-id:*"
 ```
 
-# Run tests (uses Testcontainers for Postgres)
+# Run tests
 ```
 mvn test
 ```

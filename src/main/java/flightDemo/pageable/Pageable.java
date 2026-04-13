@@ -2,6 +2,7 @@ package flightDemo.pageable;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.QueryParam;
 import lombok.Getter;
@@ -14,10 +15,12 @@ public class Pageable {
 
     public static final Pageable unpaged = new Pageable(false);
 
+    @Min(0)
     @QueryParam("page")
     @DefaultValue("0")
     private int page;
 
+    @Min(1)
     @Max(100)
     @QueryParam("size")
     @DefaultValue("10")
